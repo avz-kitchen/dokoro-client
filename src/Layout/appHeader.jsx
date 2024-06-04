@@ -1,9 +1,7 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import {
-  Text,
   Box,
-  Button,
-  Input,
   VStack,
   Center,
   HStack,
@@ -23,7 +21,7 @@ function AppHeader(props) {
       >
         <HStack w="100%" h="100%" p="1">
           <Box w="400px" h="100%" bg="pink" rounded="md">
-            <Center h="100%">Logo is here</Center>
+            <Center h="100%">Dokoro</Center>
           </Box>
           <Spacer />
           <Box w="150px" h="100%" align="end" pr="5">
