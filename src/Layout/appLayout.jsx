@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { Flex, Box } from "@chakra-ui/react";
 import AppHeader from "/AppHeader";
