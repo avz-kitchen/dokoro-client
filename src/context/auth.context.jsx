@@ -44,10 +44,31 @@ function AuthProviderWrapper(props) {
   const removeToken = () => {
     localStorage.removeItem("authToken");
   };
-
+  const signupUser = (user) => {
+    return authService
+      .signup(user)
+      .then((response) => {
+        storeToken(response.data.token);
+        authenticateUser();
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
   const logOutUser = () => {
     removeToken();
     authenticateUser();
+  };
+  const loginUser = (user) => {
+    return authService
+      .login(user)
+      .then((response) => {
+        storeToken(response.data.token);
+        authenticateUser();
+      })
+      .catch((error) => {
+        throw error;
+      });
   };
 
   useEffect(() => {
@@ -63,6 +84,8 @@ function AuthProviderWrapper(props) {
         storeToken,
         authenticateUser,
         logOutUser,
+        loginUser,
+        signupUser,
       }}
     >
       {props.children}
