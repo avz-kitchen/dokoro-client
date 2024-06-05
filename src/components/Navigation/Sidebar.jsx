@@ -90,6 +90,7 @@ function Sidebar() {
                 {isLoggedIn && (
                   <>
                     <Text color="gray">{user.name}</Text>
+                    <Button>Log Out</Button>
                   </>
                 )}
                 {!isLoggedIn && (
