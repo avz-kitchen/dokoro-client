@@ -23,7 +23,7 @@ function AuthForm({
   handleEmailChange,
   handlePasswordChange,
   handleSubmit,
-  name,
+  username,
   email,
   password,
   errorMessage,
@@ -87,8 +87,8 @@ function AuthForm({
             <Stack spacing={4}>
               <Input
                 type="text"
-                name="name"
-                value={name}
+                name="username"
+                value={username}
                 onChange={handleNameChange}
                 placeholder="username"
                 bg={"gray.100"}

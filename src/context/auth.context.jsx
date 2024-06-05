@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import authService from "../services/auth.service.js";
-
 const AuthContext = React.createContext();
 
 function AuthProviderWrapper(props) {
@@ -44,32 +43,31 @@ function AuthProviderWrapper(props) {
   const removeToken = () => {
     localStorage.removeItem("authToken");
   };
-  const signupUser = (user) => {
-    return authService
-      .signup(user)
-      .then((response) => {
-        storeToken(response.data.token);
-        authenticateUser();
-      })
-      .catch((error) => {
-        throw error;
-      });
-  };
+  // const signupUser = (user) => {
+  //   return authService
+  //     .signup(user)
+  //     .then(() => {
+
+  //     })
+  //     .catch((error) => {
+  //       throw error;
+  //     });
+  // };
   const logOutUser = () => {
     removeToken();
     authenticateUser();
   };
-  const loginUser = (user) => {
-    return authService
-      .login(user)
-      .then((response) => {
-        storeToken(response.data.token);
-        authenticateUser();
-      })
-      .catch((error) => {
-        throw error;
-      });
-  };
+  // const loginUser = (user) => {
+  //   return authService
+  //     .login(user)
+  //     .then((response) => {
+
+  //
+  //     })
+  //     .catch((error) => {
+  //       throw error;
+  //     });
+  // };
 
   useEffect(() => {
     authenticateUser();
@@ -84,8 +82,8 @@ function AuthProviderWrapper(props) {
         storeToken,
         authenticateUser,
         logOutUser,
-        loginUser,
-        signupUser,
+        // loginUser,
+        // signupUser,
       }}
     >
       {props.children}

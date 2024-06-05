@@ -30,10 +30,7 @@ class AuthService {
   };
 
   verify = () => {
-    const token = localStorage.getItem("authToken");
-    return this.api.get("/auth/verify", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    return this.api.get("/auth/verify");
   }
 }
 const authService = new AuthService();

@@ -12,10 +12,8 @@ function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(undefined);
-  const { loginUser } = useContext(AuthContext);
-
   const navigate = useNavigate();
-  const { storeToken } = useContext(AuthContext);
+  const { storeToken, authenticateUser } = useContext(AuthContext);
 
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
@@ -25,7 +23,10 @@ function Login(props) {
     const requestBody = { email, password };
 
     try {
-      await loginUser(requestBody);
+      const response = await authService.login(requestBody);
+      storeToken(response.data.authToken);
+      authenticateUser();
+      console.log(response.data.authToken);
       navigate("/");
     } catch (error) {
       const errorDescription = error.response?.data?.message || "Login failed";

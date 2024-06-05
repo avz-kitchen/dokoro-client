@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
+//import { useContext } from "react";
 import AuthForm from "../components/AuthForm";
-import { AuthContext } from "../context/auth.context";
+//import { AuthContext } from "../context/auth.context";
+import authService from "../services/auth.service.js";
+
 function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [username, setName] = useState("");
   const [errorMessage, setErrorMessage] = useState(undefined);
-  const { signupUser } = useContext(AuthContext);
+  //const { signupUser } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -18,10 +20,10 @@ function SignUp() {
 
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
-    const requestBody = { email, password, name };
+    const requestBody = { email, password, username };
 
     try {
-      await signupUser(requestBody);
+      await authService.signup(requestBody);
       navigate("/login");
     } catch (error) {
       const errorDescription = error.response?.data?.message || "Signup failed";
@@ -36,7 +38,7 @@ function SignUp() {
       handleEmailChange={handleEmailChange}
       handlePasswordChange={handlePasswordChange}
       handleSubmit={handleSignUpSubmit}
-      name={name}
+      username={username}
       email={email}
       password={password}
       errorMessage={errorMessage}
