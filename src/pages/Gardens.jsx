@@ -47,7 +47,9 @@ function Gardens() {
             <Heading>My Gardens</Heading>
             <Text>Number of gardens: {gardens?.length}</Text>
           </VStack>
-          <Button>Build garden</Button>
+          <Button as={Link} to="/garden-new">
+            Build garden
+          </Button>
         </Flex>
       </HStack>
 
@@ -94,7 +96,7 @@ function Gardens() {
                   </Badge>
                 </HStack>
                 <Center my="6">
-                  <Button Linkcolor="green.800">Go to Garden</Button>
+                  <Button color="green.800">Go to Garden</Button>
                 </Center>
               </Link>
             </Card>

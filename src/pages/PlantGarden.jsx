@@ -1,13 +1,15 @@
-import { useState } from "react";
-import axios from "axios";
-import { useGetUserID } from "../hooks/useGetUserID";
-import { useNavigate } from "react-router-dom";
-import { API_URL } from "../utils/constants";
+import { useState, useContext, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { AuthContext } from "../context/auth.context";
+import plantService from "../services/plant.service";
+import { Box, Heading, Button, Input, Textarea, Card } from "@chakra-ui/react";
 function PlantGarden() {
-  const userId = useGetUserID();
+  const { user } = useContext(AuthContext);
+  const { gardenId } = useParams();
+
   const [garden, setGarden] = useState({
     title: "",
-    gardener: userId,
+    gardener: user._id,
     description: "",
     location: "",
     plants: [],
@@ -15,9 +17,21 @@ function PlantGarden() {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (gardenId) {
+      // Fetch the garden details for editing
+      plantService
+        .getGarden(gardenId)
+        .then((response) => setGarden(response.data))
+        .catch((error) => console.error("Error fetching garden:", error));
+    }
+  }, [gardenId]);
+
   const handleChange = (e) => {
-    const { title, value } = e.target;
-    setGarden({ ...garden, [title]: value });
+    setGarden((prevGarden) => ({
+      ...prevGarden,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   const handlePlantChange = (e, index) => {
@@ -27,66 +41,101 @@ function PlantGarden() {
     setGarden({ ...garden, plants });
   };
 
-  const handleAddPlant = () => {
-    const plants = [...garden.plants, ""];
-    setGarden({ ...garden, plants });
+  const handleAddPlant = (e, index) => {
+    setGarden((prevGarden) => {
+      const updatedPlants = [...prevGarden.plants];
+      updatedPlants[index] = e.target.value;
+      return { ...prevGarden, plants: updatedPlants };
+    });
+  };
+
+  const handleDeletePlant = (index) => {
+    setGarden((prevGarden) => ({
+      ...prevGarden,
+      plants: prevGarden.plants.filter((_, i) => i !== index),
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${API_URL}/api/gardens`, { ...garden });
-
-      alert("Garden Planted");
+      if (gardenId) {
+        await plantService.updateGarden(gardenId, garden);
+        alert("Garden Updated");
+      } else {
+        await plantService.createGarden(garden);
+        alert("Garden Planted");
+      }
       navigate("/");
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
     }
   };
-
+  const handleDeleteGarden = async () => {
+    try {
+      await plantService.deleteGarden(gardenId);
+      alert("Garden Deleted");
+      navigate("/");
+    } catch (error) {
+      console.error("Error deleting garden:", error);
+    }
+  };
   return (
-    <div className="create-garden">
-      <h2>Plant Garden</h2>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="title">Title</label>
-        <input
-          type="text"
-          id="name"
-          name="title"
-          value={garden.title}
-          onChange={handleChange}
-        />
-        <label htmlFor="description">Description</label>
-        <textarea
-          id="description"
-          name="description"
-          value={garden.description}
-          onChange={handleChange}
-        ></textarea>
-        <label htmlFor="plants">Plants</label>
-        {garden.plants.map((plant, index) => (
-          <input
+    <Box as="form" onSubmit={handleSubmit}>
+      <Heading>{gardenId ? "Edit Garden" : "New Garden"}</Heading>
+      <br />
+      <label htmlFor="title">Title</label>
+      <Input
+        type="text"
+        id="name"
+        name="title"
+        value={garden.title}
+        onChange={handleChange}
+      />
+      <br />
+      <label htmlFor="description">Description</label>
+      <Textarea
+        id="description"
+        name="description"
+        value={garden.description}
+        onChange={handleChange}
+      ></Textarea>
+      <br />
+      <label htmlFor="plants">Plants</label>
+      {garden.plants.map((plant, index) => (
+        <Card key={index}>
+          <Input
             key={index}
             type="text"
             name="plants"
             value={plant}
             onChange={(e) => handlePlantChange(e, index)}
           />
-        ))}
-        <button type="button" onClick={handleAddPlant}>
-          Add Plant
-        </button>
-        <label htmlFor="location">Location</label>
-        <input
-          type="text"
-          id="location"
-          name="location"
-          value={garden.location}
-          onChange={handleChange}
-        />
-        <button type="submit">Plant Garden</button>
-      </form>
-    </div>
+          <Button type="button" onClick={() => handleDeletePlant(index)}>
+            Delete
+          </Button>
+        </Card>
+      ))}
+      <Button type="Button" onClick={handleAddPlant}>
+        Add Plant
+      </Button>
+      <label htmlFor="location">Location</label>
+      <Input
+        type="text"
+        id="location"
+        name="location"
+        value={garden.location}
+        onChange={handleChange}
+      />
+      <Button type="submit">
+        {gardenId ? "Update Garden" : "Build Garden"}
+      </Button>
+      {gardenId && (
+        <Button type="button" onClick={handleDeleteGarden}>
+          Delete Garden
+        </Button>
+      )}
+    </Box>
   );
 }
 
