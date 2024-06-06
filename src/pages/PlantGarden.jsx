@@ -1,11 +1,15 @@
 import { useState, useContext, useEffect } from "react";
+import { useTitle } from "../context/title.context";
+
 import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
-import plantService from "../services/plant.service";
+import gardenService from "../services/garden.service";
 import { Box, Heading, Button, Input, Textarea, Card } from "@chakra-ui/react";
+
 function PlantGarden() {
   const { user } = useContext(AuthContext);
   const { gardenId } = useParams();
+  const { setTitle } = useTitle();
 
   const [garden, setGarden] = useState({
     title: "",
@@ -20,12 +24,12 @@ function PlantGarden() {
   useEffect(() => {
     if (gardenId) {
       // Fetch the garden details for editing
-      plantService
+      gardenService
         .getGarden(gardenId)
         .then((response) => setGarden(response.data))
         .catch((error) => console.error("Error fetching garden:", error));
     }
-  }, [gardenId]);
+  }, [gardenId, setTitle]);
 
   const handleChange = (e) => {
     setGarden((prevGarden) => ({
@@ -60,10 +64,10 @@ function PlantGarden() {
     e.preventDefault();
     try {
       if (gardenId) {
-        await plantService.updateGarden(gardenId, garden);
+        await gardenService.updateGarden(gardenId, garden);
         alert("Garden Updated");
       } else {
-        await plantService.createGarden(garden);
+        await gardenService.createGarden(garden);
         alert("Garden Planted");
       }
       navigate("/");
@@ -73,7 +77,7 @@ function PlantGarden() {
   };
   const handleDeleteGarden = async () => {
     try {
-      await plantService.deleteGarden(gardenId);
+      await gardenService.deleteGarden(gardenId);
       alert("Garden Deleted");
       navigate("/");
     } catch (error) {

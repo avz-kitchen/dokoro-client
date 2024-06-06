@@ -1,7 +1,7 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
+import { useTitle } from "../context/title.context";
+import gardenService from "../services/garden.service";
 import { Link } from "react-router-dom";
-import { API_URL } from "../utils/constants";
 import {
   Box,
   Container,
@@ -20,23 +20,21 @@ import {
 
 function Gardens() {
   const [gardens, setGardens] = useState(null);
+  const { setTitle } = useTitle();
 
-  const getGardens = () => {
-    axios
-      .get(`${API_URL}/api/gardens`)
+  useEffect(() => {
+    setTitle("My Gardens");
+    gardenService
+      .getGardens()
       .then((response) => {
         const gardensFromApi = response.data.reverse();
         setGardens(gardensFromApi);
       })
       .catch((e) => console.log("error getting gardens from API", e));
-  };
-
-  useEffect(() => {
-    getGardens();
-  }, []);
+  }, [setTitle]);
 
   if (gardens === null) {
-    return <div className="loader"></div>;
+    return <div className="Gardens loading"></div>;
   }
 
   return (
@@ -48,7 +46,7 @@ function Gardens() {
             <Text>Number of gardens: {gardens?.length}</Text>
           </VStack>
           <Button as={Link} to="/garden-new">
-            Build garden
+            New garden
           </Button>
         </Flex>
       </HStack>
@@ -59,16 +57,16 @@ function Gardens() {
         columns={{ base: 1, md: 2 }}
         spacing={{ base: 10, lg: 32 }}
       >
-        {gardens?.map((garden, id) => {
+        {gardens.map((garden) => {
           return (
             <Card
-              key={id}
+              key={garden._id}
               spacing={{ base: 1, lg: 32 }}
               maxW="420px"
               bg="white"
               p="6"
             >
-              <Link to={`/gardens/:${garden._id}`} key={id}>
+              <Link to={`/gardens/:${garden._id}`}>
                 <Square
                   bg="brand.700"
                   borderRadius="base"
