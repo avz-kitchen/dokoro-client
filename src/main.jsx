@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import { extendTheme } from "@chakra-ui/react";
-import { AuthProviderWrapper } from "./context/auth.context.jsx";
+import { MultiSelectTheme } from "chakra-multiselect";
 import App from "./App.jsx";
 import "./index.css";
 
@@ -29,15 +29,19 @@ const borderRadius = {
   },
 };
 
-const theme = extendTheme({ colors, borderRadius });
+const theme = extendTheme({
+  colors,
+  borderRadius,
+  components: {
+    MultiSelect: MultiSelectTheme,
+  },
+});
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
       <Router>
-        <AuthProviderWrapper>
-          <App />
-        </AuthProviderWrapper>
+        <App />
       </Router>
     </ChakraProvider>
   </React.StrictMode>

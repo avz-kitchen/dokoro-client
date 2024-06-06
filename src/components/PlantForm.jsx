@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
+import { useTitle } from "../context/title.context";
+import { MultiSelect } from "chakra-multiselect";
+
 import { useNavigate, useParams } from "react-router-dom";
 import plantService from "../services/plant.service";
+import { Box, FormControl, FormLabel, Input, Button } from "@chakra-ui/react";
 
 function NewPlant() {
+  const { setTitle } = useTitle();
+
   const [plant, setPlant] = useState({
     plantName: "",
     sciName: "",
@@ -72,6 +78,7 @@ function NewPlant() {
   const storedToken = localStorage.getItem("authToken");
 
   useEffect(() => {
+    setTitle("New Plant");
     if (plantId) {
       const fetchPlant = async () => {
         try {
@@ -90,11 +97,7 @@ function NewPlant() {
     setPlant({ ...plant, [name]: value });
   };
 
-  const handleMultiChange = (e, name) => {
-    const selectedOptions = Array.from(
-      e.target.selectedOptions,
-      (option) => option.value
-    );
+  const handleMultiChange = (selectedOptions, name) => {
     setPlant({ ...plant, [name]: selectedOptions });
   };
 
@@ -120,12 +123,11 @@ function NewPlant() {
   };
 
   return (
-    <div className="create-plant">
-      <h2>Add a new plant</h2>
-      <form onSubmit={handleSubmit}>
+    <Box>
+      <FormControl onSubmit={handleSubmit}>
         <br />
-        <label htmlFor="plantName">Name</label>
-        <input
+        <FormLabel htmlFor="plantName">Name</FormLabel>
+        <Input
           type="text"
           id="plantName"
           name="plantName"
@@ -134,8 +136,8 @@ function NewPlant() {
         />
         <br />
 
-        <label htmlFor="sciName">Scientific Name</label>
-        <input
+        <FormLabel htmlFor="sciName">Scientific Name</FormLabel>
+        <Input
           type="text"
           id="sciName"
           name="sciName"
@@ -144,76 +146,56 @@ function NewPlant() {
         />
         <br />
 
-        <label htmlFor="season">Season</label>
-        <select
+        <FormLabel htmlFor="season">Season</FormLabel>
+        <MultiSelect
           id="season"
           name="season"
           size="4"
-          multiple
+          options={seasons.map((season) => ({ label: season, value: season }))}
           value={plant.season}
           onChange={(e) => handleMultiChange(e, "season")}
-        >
-          {seasons.map((season) => (
-            <option key={season} value={season}>
-              {season}
-            </option>
-          ))}
-        </select>
+        />
+
         <br />
 
-        <label htmlFor="nutrient">Nutrient</label>
-        <select
+        <FormLabel htmlFor="nutrient">Nutrient</FormLabel>
+        <MultiSelect
           id="nutrient"
           name="nutrient"
           size="4"
-          multiple
+          options={nutrients.map((nutrient) => ({
+            label: nutrient,
+            value: nutrient,
+          }))}
           value={plant.nutrient}
           onChange={(e) => handleMultiChange(e, "nutrient")}
-        >
-          {nutrients.map((nutrient) => (
-            <option key={nutrient} value={nutrient}>
-              {nutrient}
-            </option>
-          ))}
-        </select>
+        />
         <br />
 
-        <label htmlFor="effect">Effect</label>
-        <select
+        <FormLabel htmlFor="effect">Effect</FormLabel>
+        <MultiSelect
           id="effect"
           name="effect"
           size="4"
-          multiple
+          options={effects.map((effect) => ({ label: effect, value: effect }))}
           value={plant.effect}
           onChange={(e) => handleMultiChange(e, "effect")}
-        >
-          {effects.map((effect) => (
-            <option key={effect} value={effect}>
-              {effect}
-            </option>
-          ))}
-        </select>
+        />
         <br />
 
-        <label htmlFor="power">Power</label>
-        <select
+        <FormLabel htmlFor="power">Power</FormLabel>
+        <MultiSelect
           id="power"
           name="power"
           size="4"
-          multiple
+          options={powers.map((power) => ({ label: power, value: power }))}
           value={plant.power}
           onChange={(e) => handleMultiChange(e, "power")}
-        >
-          {powers.map((power) => (
-            <option key={power} value={power}>
-              {power}
-            </option>
-          ))}
-        </select>
+        />
         <br />
 
-        <label htmlFor="grow">Grow</label>
-        <input
+        <FormLabel htmlFor="grow">Grow</FormLabel>
+        <Input
           type="text"
           id="grow"
           name="grow"
@@ -222,25 +204,19 @@ function NewPlant() {
         />
         <br />
 
-        <label htmlFor="part">Part</label>
-        <select
+        <FormLabel htmlFor="part">Part</FormLabel>
+        <MultiSelect
           type="text"
           id="part"
           name="part"
-          multiple
+          options={parts.map((part) => ({ label: part, value: part }))}
           value={plant.part}
           onChange={(e) => handleMultiChange(e, "part")}
-        >
-          {parts.map((part) => (
-            <option key={part} value={part}>
-              {part}
-            </option>
-          ))}
-        </select>
+        />
         <br />
 
-        <label htmlFor="sow">Sow</label>
-        <input
+        <FormLabel htmlFor="sow">Sow</FormLabel>
+        <Input
           type="number"
           min={1}
           max={6}
@@ -251,9 +227,9 @@ function NewPlant() {
         />
         <br />
 
-        <button type="submit">Add Plant</button>
-      </form>
-    </div>
+        <Button type="submit">Add Plant</Button>
+      </FormControl>
+    </Box>
   );
 }
 
