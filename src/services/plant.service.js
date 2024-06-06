@@ -9,19 +9,19 @@ class PlantService {
     }
 
     createPlant = (requestBody) => {
-        return this.api.post("/plants", requestBody);
+        return this.api.post("api/plants", requestBody);
 
     };
 
     getPlants = () => {
-        return this.api.get("/plants");
+        return this.api.get("api/plants");
 
     };
     getPlant = (plantId) => {
-        return this.api.get(`/plants/:${plantId}`);
+        return this.api.get(`api/plants/:${plantId}`);
     };
     updatePlant = (plantId, updatedData) => {
-        return this.api.put(`/plants/:${plantId}`, updatedData);
+        return this.api.put(`api/plants/:${plantId}`, updatedData);
     }
 }
 const plantService = new PlantService();
