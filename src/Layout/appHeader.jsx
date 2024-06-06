@@ -26,7 +26,7 @@ function AppHeader({ onPage, title }) {
   }, [title, setTitle]);
 
   return (
-    <VStack w="100%" h="40px">
+    <VStack w="100%" h="40px" marginBottom={2}>
       <HStack w="100%" h="100%" p="4">
         <Box w="100" h="100%" rounded="md">
           <Center h="100%">Dokoro</Center>
@@ -39,21 +39,36 @@ function AppHeader({ onPage, title }) {
         </Center>
         <Spacer />
 
-        <Box>
+        <HStack>
           {isLoggedIn && onPage === "/gardens" && (
-            <Button as={Link} to="/garden-new">
+            <Button
+              as={Link}
+              to="/garden-new"
+              bgColor="green.400"
+              _hover={{
+                bgGradient: "linear(to-r, green.400,yellow.400)",
+                boxShadow: "xl",
+              }}
+            >
               New Garden
             </Button>
           )}
           {isLoggedIn && onPage === "/plants" && (
-            <Button as={Link} to="/plant-new">
+            <Button
+              as={Link}
+              to="/plant-new"
+              _hover={{
+                bgGradient: "linear(to-r, yellow.400,green.400)",
+                boxShadow: "xl",
+              }}
+            >
               New Plant
             </Button>
           )}
           <Text fontSize="lg" color="gray.600">
             {currentDate}
           </Text>
-        </Box>
+        </HStack>
       </HStack>
     </VStack>
   );
