@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useTitle } from "../context/title.context";
+import { AuthContext } from "../context/auth.context";
 import gardenService from "../services/garden.service";
 import { Link } from "react-router-dom";
 import {
@@ -16,9 +17,11 @@ import {
   Badge,
   Square,
   VStack,
+  Spacer,
 } from "@chakra-ui/react";
 
 function Gardens() {
+  const { user } = useContext(AuthContext);
   const [gardens, setGardens] = useState(null);
   const { setTitle } = useTitle();
 
@@ -27,27 +30,30 @@ function Gardens() {
     gardenService
       .getGardens()
       .then((response) => {
-        const gardensFromApi = response.data.reverse();
-        setGardens(gardensFromApi);
+        const userGardens = response.data.filter(
+          (garden) => garden.gardener === user._id
+        );
+        setGardens(userGardens);
       })
-      .catch((e) => console.log("error getting gardens from API", e));
-  }, [setTitle]);
+      .catch((e) => console.log("error getting user gardens from API", e));
+  }, [user]);
 
   if (gardens === null) {
-    return <div className="Gardens loading"></div>;
+    return (
+      <Button as="Link" to="/plant-garden">
+        Plant your first Garden
+      </Button>
+    );
   }
 
   return (
     <Box position={"relative"} spacing={{ base: 10, lg: 32 }}>
       <HStack>
         <Flex>
-          <VStack>
-            <Heading>My Gardens</Heading>
-            <Text>Number of gardens: {gardens?.length}</Text>
-          </VStack>
-          <Button as={Link} to="/garden-new">
+          <VStack></VStack>
+          {/* <Button as={Link} to="/garden-new">
             New garden
-          </Button>
+          </Button> */}
         </Flex>
       </HStack>
 
@@ -66,7 +72,7 @@ function Gardens() {
               bg="white"
               p="6"
             >
-              <Link to={`/gardens/:${garden._id}`}>
+              <Link to={`/gardens/${garden._id}`}>
                 <Square
                   bg="brand.700"
                   borderRadius="base"
@@ -101,6 +107,8 @@ function Gardens() {
           );
         })}
       </Container>
+      <Spacer></Spacer>
+      <Text>Number of gardens: {gardens?.length}</Text>
     </Box>
   );
 }

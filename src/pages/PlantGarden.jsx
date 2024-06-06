@@ -26,7 +26,11 @@ function PlantGarden() {
       // Fetch the garden details for editing
       gardenService
         .getGarden(gardenId)
-        .then((response) => setGarden(response.data))
+        .then((response) => {
+          setGarden(response.data);
+          setTitle(response.data.title);
+        })
+
         .catch((error) => console.error("Error fetching garden:", error));
     }
   }, [gardenId, setTitle]);
@@ -86,7 +90,7 @@ function PlantGarden() {
   };
   return (
     <Box as="form" onSubmit={handleSubmit}>
-      <Heading>{gardenId ? "Edit Garden" : "New Garden"}</Heading>
+      <Heading>{gardenId ? "My Garden" : "New Garden"}</Heading>
       <br />
       <label htmlFor="title">Title</label>
       <Input
