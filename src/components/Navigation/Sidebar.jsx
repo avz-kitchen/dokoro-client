@@ -13,7 +13,11 @@ import NavItem from "./NavItem";
 
 function Sidebar() {
   const [size, setSize] = useState(250);
-  const { isLoggedIn, user } = useContext(AuthContext);
+  const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logOutUser();
+  };
 
   return (
     <React.Fragment>
@@ -90,7 +94,7 @@ function Sidebar() {
                 {isLoggedIn && (
                   <>
                     <Text color="gray">{user.name}</Text>
-                    <Button>Log Out</Button>
+                    <Button onClick={handleLogout}>Log Out</Button>
                   </>
                 )}
                 {!isLoggedIn && (
