@@ -11,10 +11,25 @@ const colors = {
   brand: {
     900: "#1a365d",
     800: "#153e75",
-    700: "#2a69ac",
+    700: "#77DDAA",
   },
 };
-const theme = extendTheme({ colors });
+
+const borderRadius = {
+  radii: {
+    none: "0",
+    sm: "0.125rem",
+    base: "0.25rem",
+    md: "0.375rem",
+    lg: "0.5rem",
+    xl: "0.75rem",
+    "2xl": "1rem",
+    "3xl": "1.5rem",
+    full: "9999px",
+  },
+};
+
+const theme = extendTheme({ colors, borderRadius });
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
