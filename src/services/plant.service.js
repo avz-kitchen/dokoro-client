@@ -18,10 +18,12 @@ class PlantService {
 
     };
     getPlant = (plantId) => {
-        return this.api.get(`api/plants/:${plantId}`);
+        return this.api.get(`api/plants/${plantId}`);
     };
     updatePlant = (plantId, updatedData) => {
-        return this.api.put(`api/plants/:${plantId}`, updatedData);
+        return this.api.put(`api/plants/${plantId}`, updatedData, {
+            headers: { Authorization: `Bearer ${authToken}` }
+        });
     }
 }
 const plantService = new PlantService();

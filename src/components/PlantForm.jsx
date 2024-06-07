@@ -4,7 +4,7 @@ import { MultiSelect } from "chakra-multiselect";
 
 import { useNavigate, useParams } from "react-router-dom";
 import plantService from "../services/plant.service";
-import { Box, FormControl, FormLabel, Input, Button } from "@chakra-ui/react";
+import { Box, FormLabel, Input, Button } from "@chakra-ui/react";
 
 function NewPlant() {
   const { setTitle } = useTitle();
@@ -17,8 +17,7 @@ function NewPlant() {
     nutrient: [],
     effect: [],
     power: [],
-    grow: "",
-    part: [""],
+    method: "",
   });
   const { plantId } = useParams();
 
@@ -98,33 +97,44 @@ function NewPlant() {
   };
 
   const handleMultiChange = (selectedOptions, name) => {
-    setPlant({ ...plant, [name]: selectedOptions });
+    const selectedValues = selectedOptions.map((option) => option.value);
+
+    setPlant({ ...plant, [name]: selectedValues });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(plant);
+    const updatedPlant = {
+      ...plant,
+      season: plant.season.map((season) => season.value),
+      nutrient: plant.nutrient.map((nutrient) => nutrient.value),
+      effect: plant.effect.map((effect) => effect.value),
+      power: plant.power.map((power) => power.value),
+      part: plant.part.map((part) => part.value),
+    };
     try {
       if (plantId) {
-        await plantService.updatePlant(plantId, plant, {
+        await plantService.updatePlant(plantId, updatedPlant, {
           headers: { Authorization: `Bearer ${storedToken}` },
         });
         alert("Plant Updated");
       } else {
-        await plantService.createPlant(plant, {
+        await plantService.createPlant(updatedPlant, {
           headers: { Authorization: `Bearer ${storedToken}` },
         });
         alert("Plant Added");
       }
-      navigate("/plants/:plantId");
+      navigate("/plants/${plantId}");
     } catch (error) {
       console.error(error);
+      alert(error);
     }
   };
 
   return (
     <Box>
-      <FormControl onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <br />
         <FormLabel htmlFor="plantName">Name</FormLabel>
         <Input
@@ -133,6 +143,7 @@ function NewPlant() {
           name="plantName"
           value={plant.plantName}
           onChange={handleChange}
+          required
         />
         <br />
 
@@ -151,9 +162,10 @@ function NewPlant() {
           id="season"
           name="season"
           size="4"
-          options={seasons.map((season) => ({ label: season, value: season }))}
+          options={seasons.map((season) => ({ value: season, label: season }))}
           value={plant.season}
           onChange={(e) => handleMultiChange(e, "season")}
+          required
         />
 
         <br />
@@ -177,9 +189,10 @@ function NewPlant() {
           id="effect"
           name="effect"
           size="4"
-          options={effects.map((effect) => ({ label: effect, value: effect }))}
+          options={effects.map((effect) => ({ value: effect, label: effect }))}
           value={plant.effect}
           onChange={(e) => handleMultiChange(e, "effect")}
+          required
         />
         <br />
 
@@ -188,18 +201,18 @@ function NewPlant() {
           id="power"
           name="power"
           size="4"
-          options={powers.map((power) => ({ label: power, value: power }))}
+          options={powers.map((power) => ({ value: power, label: power }))}
           value={plant.power}
           onChange={(e) => handleMultiChange(e, "power")}
         />
         <br />
 
-        <FormLabel htmlFor="grow">Grow</FormLabel>
+        <FormLabel htmlFor="method">Method</FormLabel>
         <Input
           type="text"
-          id="grow"
-          name="grow"
-          value={plant.grow}
+          id="method"
+          name="method"
+          value={plant.method}
           onChange={handleChange}
         />
         <br />
@@ -209,7 +222,7 @@ function NewPlant() {
           type="text"
           id="part"
           name="part"
-          options={parts.map((part) => ({ label: part, value: part }))}
+          options={parts.map((part) => ({ value: part, label: part }))}
           value={plant.part}
           onChange={(e) => handleMultiChange(e, "part")}
         />
@@ -228,7 +241,7 @@ function NewPlant() {
         <br />
 
         <Button type="submit">Add Plant</Button>
-      </FormControl>
+      </form>
     </Box>
   );
 }

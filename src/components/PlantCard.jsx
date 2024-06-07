@@ -12,10 +12,11 @@ import {
 import { Link } from "react-router-dom";
 
 function PlantCard({ plant, season, effect }) {
+  console.log(plant);
   return (
-    <Card maxW="420px" bg="white" p="6">
+    <Card maxW="420px" bg="white" p="6" mb="5">
       <Heading as="h2" my="2" size="md">
-        {plant.plantName}
+        {plant}
       </Heading>
       <Image
         src="https://justfruitsandexotics.com/wp-content/uploads/placeholder.jpg"
@@ -26,15 +27,21 @@ function PlantCard({ plant, season, effect }) {
       />
       <HStack mt="5" mb="5" spacing="3">
         {season.map((item) => (
-          <Tag key={item} variant="outline">
+          <Tag as="span" key={item} variant="outline" display="flex">
             {item}
           </Tag>
         ))}
-        <Tag as="span">{effect} </Tag>
       </HStack>
+      {effect.map((item) => (
+        <Tag as="span" key={item} variant="outline">
+          {item}
+        </Tag>
+      ))}
       <Spacer />
       <Link to={`/plants/${plant._id}`}>
-        <Button bgColor="yellow.400">Learn more</Button>
+        <Button bgColor="yellow.400" mt="5">
+          Learn more
+        </Button>
       </Link>
       {/* <Button>Save plant</Button> */}
     </Card>
