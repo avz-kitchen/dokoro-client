@@ -96,8 +96,7 @@ function NewPlant() {
     setPlant({ ...plant, [name]: value });
   };
 
-  const handleMultiChange = (selectedOptions, name, e) => {
-    e.preventDefault();
+  const handleMultiChange = (selectedOptions, name) => {
     const selectedValues = selectedOptions.map((option) => option.value);
     setPlant({ ...plant, [name]: selectedValues });
   };
@@ -164,8 +163,8 @@ function NewPlant() {
           size="4"
           options={seasons.map((season) => ({ value: season, label: season }))}
           value={plant.season}
-          onChange={(selectedOptions, name, e) =>
-            handleMultiChange(selectedOptions, "season", e)
+          onChange={(selectedOptions) =>
+            handleMultiChange("season", selectedOptions)
           }
           required
         />
@@ -182,7 +181,9 @@ function NewPlant() {
             value: nutrient,
           }))}
           value={plant.nutrient}
-          onChange={(e) => handleMultiChange(e, "nutrient")}
+          onChange={(selectedOptions) =>
+            handleMultiChange("nutrient", selectedOptions)
+          }
         />
         <br />
 
@@ -193,8 +194,8 @@ function NewPlant() {
           size="4"
           options={effects.map((effect) => ({ value: effect, label: effect }))}
           value={plant.effect}
-          onChange={(selectedOptions, name, e) =>
-            handleMultiChange(selectedOptions, "effect", e)
+          onChange={(selectedOptions) =>
+            handleMultiChange("effect", selectedOptions)
           }
           required
         />
@@ -207,8 +208,8 @@ function NewPlant() {
           size="4"
           options={powers.map((power) => ({ value: power, label: power }))}
           value={plant.power}
-          onChange={(selectedOptions, name, e) =>
-            handleMultiChange(selectedOptions, "power", e)
+          onChange={(selectedOptions) =>
+            handleMultiChange("power", selectedOptions)
           }
         />
         <br />
@@ -230,8 +231,8 @@ function NewPlant() {
           name="part"
           options={parts.map((part) => ({ value: part, label: part }))}
           value={plant.part}
-          onChange={(selectedOptions, name, e) =>
-            handleMultiChange(selectedOptions, "part", e)
+          onChange={(selectedOptions) =>
+            handleMultiChange("part", selectedOptions)
           }
         />
         <br />
