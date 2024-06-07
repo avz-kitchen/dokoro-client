@@ -96,7 +96,8 @@ function NewPlant() {
     setPlant({ ...plant, [name]: value });
   };
 
-  const handleMultiChange = (selectedOptions, name) => {
+  const handleMultiChange = (selectedOptions, name, e) => {
+    e.preventDefault();
     const selectedValues = selectedOptions.map((option) => option.value);
     setPlant({ ...plant, [name]: selectedValues });
   };
@@ -163,7 +164,9 @@ function NewPlant() {
           size="4"
           options={seasons.map((season) => ({ value: season, label: season }))}
           value={plant.season}
-          onChange={(e) => handleMultiChange(e, "season")}
+          onChange={(selectedOptions, name, e) =>
+            handleMultiChange(selectedOptions, "season", e)
+          }
           required
         />
 
@@ -190,7 +193,9 @@ function NewPlant() {
           size="4"
           options={effects.map((effect) => ({ value: effect, label: effect }))}
           value={plant.effect}
-          onChange={(e) => handleMultiChange(e, "effect")}
+          onChange={(selectedOptions, name, e) =>
+            handleMultiChange(selectedOptions, "effect", e)
+          }
           required
         />
         <br />
@@ -202,7 +207,9 @@ function NewPlant() {
           size="4"
           options={powers.map((power) => ({ value: power, label: power }))}
           value={plant.power}
-          onChange={(e) => handleMultiChange(e, "power")}
+          onChange={(selectedOptions, name, e) =>
+            handleMultiChange(selectedOptions, "power", e)
+          }
         />
         <br />
 
@@ -223,7 +230,9 @@ function NewPlant() {
           name="part"
           options={parts.map((part) => ({ value: part, label: part }))}
           value={plant.part}
-          onChange={(e) => handleMultiChange(e, "part")}
+          onChange={(selectedOptions, name, e) =>
+            handleMultiChange(selectedOptions, "part", e)
+          }
         />
         <br />
 
