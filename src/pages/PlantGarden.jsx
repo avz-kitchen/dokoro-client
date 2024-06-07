@@ -40,7 +40,6 @@ function PlantGarden() {
         .getGarden(gardenId)
         .then((response) => {
           setGarden(response.data);
-          setTitle(response.data.title);
         })
 
         .catch((error) => console.error("Error getting garden:", error));

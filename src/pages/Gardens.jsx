@@ -30,7 +30,7 @@ function Gardens() {
       .getGardens()
       .then((response) => {
         console.log("Response from getGardens:", response); // Log the entire response
-        setGardens(response.data); // Set all gardens from the response
+        setGardens(response); // Set all gardens from the response
       })
       .catch((error) => {
         console.error("Error fetching gardens:", error); // Log any errors
