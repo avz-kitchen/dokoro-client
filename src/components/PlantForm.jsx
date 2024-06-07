@@ -125,7 +125,7 @@ function NewPlant() {
         });
         alert("Plant Added");
       }
-      navigate("/plants/${plantId}");
+      navigate("/plants");
     } catch (error) {
       console.error(error);
       alert(error);
