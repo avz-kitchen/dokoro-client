@@ -18,7 +18,6 @@ function PlantDirectory() {
           <Link to={`/plants/${plantId}`} key={plant._id}>
             <Suspense fallback={<div>Loading...</div>}>
               <PlantCard
-                key={plant.id}
                 plant={plant.plantName}
                 season={plant.season}
                 effect={plant.effect}

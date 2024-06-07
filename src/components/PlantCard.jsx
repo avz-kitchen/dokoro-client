@@ -1,18 +1,15 @@
 /* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
-import {
-  Card,
-  Image,
-  HStack,
-  Tag,
-  Heading,
-  Button,
-  Spacer,
-} from "@chakra-ui/react";
-import { Link } from "react-router-dom";
-
+import { Card, Image, HStack, Tag, Heading, Spacer } from "@chakra-ui/react";
+// import { Link } from "react-router-dom";
+// import GardenModal from "./GardenModal";
+// import { useState } from "react";
 function PlantCard({ plant, season, effect }) {
   console.log(plant);
+  // const [showModal, setShowModal] = useState(false);
+  // const handleAddToGarden = () => {
+  //   setShowModal(true);
+  // };
   return (
     <Card maxW="420px" bg="white" p="6" mb="5">
       <Heading as="h2" my="2" size="md">
@@ -38,12 +35,19 @@ function PlantCard({ plant, season, effect }) {
         </Tag>
       ))}
       <Spacer />
-      <Link to={`/plants/${plant._id}`}>
+      {/* <Link to={`/plants/${plant._id}`}>
         <Button bgColor="yellow.400" mt="5">
           Learn more
         </Button>
       </Link>
-      {/* <Button>Save plant</Button> */}
+      <Button onClick={handleAddToGarden}>Save plant</Button>
+      {showModal && (
+        <GardenModal
+          plant={plant}
+          gardens={gardens}
+          onClose={() => setShowModal(false)}
+        />
+      )} */}
     </Card>
   );
 }
