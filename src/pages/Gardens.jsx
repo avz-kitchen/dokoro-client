@@ -1,6 +1,5 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useTitle } from "../context/title.context";
-import { AuthContext } from "../context/auth.context";
 import gardenService from "../services/garden.service";
 import { Link } from "react-router-dom";
 import {
@@ -21,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 
 function Gardens() {
-  const { user } = useContext(AuthContext);
+  // const { user } = useContext(AuthContext);
   const [gardens, setGardens] = useState(null);
   const { setTitle } = useTitle();
 
@@ -30,17 +29,17 @@ function Gardens() {
     gardenService
       .getGardens()
       .then((response) => {
-        const userGardens = response.data.filter(
-          (garden) => garden.gardener === user._id
-        );
-        setGardens(userGardens);
+        console.log("Response from getGardens:", response); // Log the entire response
+        setGardens(response.data); // Set all gardens from the response
       })
-      .catch((e) => console.log("error getting user gardens from API", e));
-  }, [user]);
+      .catch((error) => {
+        console.error("Error fetching gardens:", error); // Log any errors
+      });
+  }, []);
 
   if (gardens === null) {
     return (
-      <Button as="Link" to="/plant-garden">
+      <Button as={Link} to="/plant-garden">
         Plant your first Garden
       </Button>
     );
@@ -63,49 +62,50 @@ function Gardens() {
         columns={{ base: 1, md: 2 }}
         spacing={{ base: 10, lg: 32 }}
       >
-        {gardens.map((garden) => {
-          return (
-            <Card
-              key={garden._id}
-              spacing={{ base: 1, lg: 32 }}
-              maxW="420px"
-              bg="white"
-              p="6"
-            >
-              <Link to={`/gardens/${garden._id}`}>
-                <Square
-                  bg="brand.700"
-                  borderRadius="base"
-                  minW="240px"
-                  minH="160px"
-                >
-                  <Heading as="h3" size="md" color="brand.900">
-                    {garden.title}
-                  </Heading>
-                </Square>
-                <br />
+        {gardens &&
+          gardens.map((garden) => {
+            return (
+              <Card
+                key={garden._id}
+                spacing={{ base: 1, lg: 32 }}
+                maxW="420px"
+                bg="white"
+                p="6"
+              >
+                <Link to={`/gardens/${garden._id}`}>
+                  <Square
+                    bg="brand.700"
+                    borderRadius="base"
+                    minW="240px"
+                    minH="160px"
+                  >
+                    <Heading as="h3" size="md" color="brand.900">
+                      {garden.title}
+                    </Heading>
+                  </Square>
+                  <br />
 
-                <HStack>
-                  <Text as="p" fontSize="xs" color="grey">
-                    Plants:
-                  </Text>
-                  <Badge as="span" color="green.800" fontSize="md">
-                    {garden.plant?.length ?? 0}
-                  </Badge>
-                  <Text as="p" fontSize="xs" color="grey">
-                    Location:
-                  </Text>
-                  <Badge as="span" color="green.800" fontSize="md">
-                    {garden.location}
-                  </Badge>
-                </HStack>
-                <Center my="6">
-                  <Button color="green.800">Go to Garden</Button>
-                </Center>
-              </Link>
-            </Card>
-          );
-        })}
+                  <HStack>
+                    <Text as="p" fontSize="xs" color="grey">
+                      Plants:
+                    </Text>
+                    <Badge as="span" color="green.800" fontSize="md">
+                      {garden.plant?.length ?? 0}
+                    </Badge>
+                    <Text as="p" fontSize="xs" color="grey">
+                      Location:
+                    </Text>
+                    <Badge as="span" color="green.800" fontSize="md">
+                      {garden.location}
+                    </Badge>
+                  </HStack>
+                  <Center my="6">
+                    <Button color="green.800">Go to Garden</Button>
+                  </Center>
+                </Link>
+              </Card>
+            );
+          })}
       </Container>
       <Spacer></Spacer>
       <Text>Number of gardens: {gardens?.length}</Text>

@@ -5,6 +5,13 @@ class GardenService {
         this.api = axios.create({
             baseURL: import.meta.env.VITE_API_URL || "http://localhost:5005",
         });
+        this.api.interceptors.request.use((config) => {
+            const token = localStorage.getItem("authToken");
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`;
+            }
+            return config;
+        });
     }
 
     // Create a new garden
@@ -14,7 +21,14 @@ class GardenService {
 
     // Get all gardens
     getGardens = () => {
-        return this.api.get("/api/gardens");
+        if (this.gardens) {
+            return Promise.resolve(this.gardens);
+        } else {
+            return this.api.get("/api/gardens").then((response) => {
+                this.gardens = response.data;
+                return response.data;
+            });
+        }
     };
 
     // Get a specific garden by ID
