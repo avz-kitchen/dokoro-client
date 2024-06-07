@@ -28,15 +28,12 @@ function AppHeader({ onPage, title }) {
   return (
     <VStack w="100%" h="40px" marginBottom={2}>
       <HStack w="100%" h="100%" p="4">
-        <Box w="100" h="100%" rounded="md">
-          <Center h="100%">Dokoro</Center>
-        </Box>
-        <Spacer />
         <Center>
           <Heading as="h1" size="lg">
             {title}
           </Heading>
         </Center>
+
         <Spacer />
 
         <HStack>

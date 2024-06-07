@@ -1,22 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useGetUserID } from "../hooks/useGetUserID";
 import plantService from "../services/plant.service";
 import { Link } from "react-router-dom";
+import { useTitle } from "../context/title.context";
+import { Box, Wrap, WrapItem } from "@chakra-ui/react";
+import PlantCard from "../components/PlantCard";
 
-import {
-  Box,
-  Container,
-  Stack,
-  SimpleGrid,
-  Heading,
-  Card,
-} from "@chakra-ui/react";
 function Home() {
   const [plants, setPlants] = useState([]);
   // const [savedPlants, setSavedPlants] = useState([]);
-
   const userId = useGetUserID();
+  const { setTitle } = useTitle();
+
   useEffect(() => {
+    setTitle("Home");
+
     plantService
       .getPlants()
       .then((response) => {
@@ -41,37 +39,38 @@ function Home() {
 
   return (
     <Box position={"relative"}>
-      <Container
-        as={SimpleGrid}
-        maxW={"7xl"}
-        columns={{ base: 1, md: 2 }}
-        spacing={{ base: 10, lg: 32 }}
-        py={{ base: 10, sm: 20, lg: 32 }}
-      >
-        <Stack spacing={{ base: 10, md: 20 }}>
-          <Heading>Plants</Heading>
-          {plants.map((plant) => (
-            <Card key={plant._id}>
-              <div>
-                <h2>{plant.plantName}</h2>
-                <Link to={`/plants/${plant.id}`} key={plant.id}></Link>
-                {/* <button
-                onClick={() => savePlant(plant._id)}
-                disabled={isPlantSaved(plant._id)}
-              >
-                {isPlantSaved(plant._id) ? "Saved" : "Save"}
-              </button> */}
-              </div>
-              <div>
-                <p>{plant.power}</p>
-              </div>
-              {/* <img src={plant.imageUrl} alt={plant.name} /> */}
-            </Card>
-          ))}
-        </Stack>
-      </Container>
+      <Wrap spacing={{ base: 10, md: 20 }}>
+        {plants.map((plant) => (
+          <WrapItem key={plant._id}>
+            {plant._id && (
+              <Link to={`/plants/${plant._id}`}>
+                <Suspense fallback={<div>Loading...</div>}>
+                  <PlantCard
+                    key={plant.id}
+                    plant={plant.plantName}
+                    season={plant.season}
+                    effect={plant.effect}
+                  ></PlantCard>
+                </Suspense>
+              </Link>
+            )}
+          </WrapItem>
+        ))}
+      </Wrap>
     </Box>
   );
 }
 
 export default Home;
+
+//{
+/* <button
+                onClick={() => savePlant(plant._id)}
+                disabled={isPlantSaved(plant._id)}
+              >
+                {isPlantSaved(plant._id) ? "Saved" : "Save"}
+              </button> */
+//}
+//{
+/* <img src={plant.imageUrl} alt={plant.name} /> */
+//}
