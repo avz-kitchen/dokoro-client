@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-//import { useContext } from "react";
 import AuthForm from "../components/AuthForm";
-//import { AuthContext } from "../context/auth.context";
 import authService from "../services/auth.service.js";
 
 function SignUp() {
@@ -10,7 +8,6 @@ function SignUp() {
   const [password, setPassword] = useState("");
   const [username, setName] = useState("");
   const [errorMessage, setErrorMessage] = useState(undefined);
-  //const { signupUser } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
