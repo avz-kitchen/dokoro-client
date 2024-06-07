@@ -18,7 +18,6 @@ import {
   VStack,
   Spacer,
 } from "@chakra-ui/react";
-
 function Gardens() {
   // const { user } = useContext(AuthContext);
   const [gardens, setGardens] = useState(null);

@@ -50,7 +50,7 @@ function AppHeader({ onPage, title }) {
               New Garden
             </Button>
           )}
-          {isLoggedIn && onPage === "/plants" && (
+          {/* {isLoggedIn && onPage === "/plants" && (
             <Button
               as={Link}
               to="/plant-new"
@@ -61,7 +61,7 @@ function AppHeader({ onPage, title }) {
             >
               New Plant
             </Button>
-          )}
+          )} */}
           <Text fontSize="lg" color="gray.600">
             {currentDate}
           </Text>
