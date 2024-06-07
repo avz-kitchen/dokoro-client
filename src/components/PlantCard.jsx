@@ -7,14 +7,15 @@ import {
   Tag,
   Heading,
   Button,
-  Center,
+  Spacer,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 function PlantCard({ plant, season, effect }) {
   return (
     <Card maxW="420px" bg="white" p="6">
       <Heading as="h2" my="2" size="md">
-        {plant}
+        {plant.plantName}
       </Heading>
       <Image
         src="https://justfruitsandexotics.com/wp-content/uploads/placeholder.jpg"
@@ -23,7 +24,7 @@ function PlantCard({ plant, season, effect }) {
         objectFit="cover"
         mx="auto"
       />
-      <HStack mt="5" spacing="3">
+      <HStack mt="5" mb="5" spacing="3">
         {season.map((item) => (
           <Tag key={item} variant="outline">
             {item}
@@ -31,12 +32,11 @@ function PlantCard({ plant, season, effect }) {
         ))}
         <Tag as="span">{effect} </Tag>
       </HStack>
-      <HStack>
-        <Center my="6">
-          <Button colorScheme="yellow">Learn more</Button>
-          <Button>Save plant</Button>
-        </Center>
-      </HStack>
+      <Spacer />
+      <Link to={`/plants/${plant._id}`}>
+        <Button bgColor="yellow.400">Learn more</Button>
+      </Link>
+      {/* <Button>Save plant</Button> */}
     </Card>
   );
 }
