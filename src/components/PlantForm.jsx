@@ -96,10 +96,8 @@ function NewPlant() {
     setPlant({ ...plant, [name]: value });
   };
 
-  const handleMultiChange = (e, selectedOptions, name) => {
+  const handleMultiChange = (selectedOptions, name) => {
     const selectedValues = selectedOptions.map((option) => option.value);
-    e.preventDefault();
-
     setPlant({ ...plant, [name]: selectedValues });
   };
 
